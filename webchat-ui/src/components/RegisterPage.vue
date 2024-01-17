@@ -1,9 +1,9 @@
 <template>
-  <div class="login-container">
-    <h2>Login</h2>
+  <div class="register-container">
+    <h2>Register</h2>
     
     <!-- 输入表单 -->
-    <form autocomplete="off"> <!-- @submit.prevent=""  -->
+    <form autocomplete="off">
       <label for="username">Username:</label>
       <input type="text" id="username" v-model="username" required><br/><br/>
       
@@ -11,9 +11,9 @@
       <input type="password" id="password" v-model="password" required><br/><br/><br/>
       
       <div style="action-container">
-      	<button type="submit" v-on:click="goLogin">Login</button>
+      	<button type="submit" v-on:click="onRegister">Register</button>
       	<div class="action-space"></div>
-      	<button type="go-register" v-on:click="goRegister">Register</button>
+      	<button type="go-login" v-on:click="onLogin">Login</button>
       </div>
     </form>
     
@@ -36,11 +36,8 @@
 	  },
 	  
 	  methods: {
-	    // handleSubmit() {
 
-	    // },
-
-	    async loginRequest() {
+	    async registerRequest() {
 	    	try {
 	    		const res = await request.post('', {
 	    			username: this.username,
@@ -64,14 +61,15 @@
 	    		console.error("LoginRequest Error: ", e);
 	    	}
 	    },
-	    goLogin() {
-	    	// loginRequest()
-	    	console.log("点击了登录按钮");
+
+	    onRegister() {
+			registerRequest();
 	    },
-	    goRegister() {
-	    	console.log("点击了注册按钮");
-	    	this.$router.replace('/register')
+
+	    onLogin() {
+	    	this.$router.replace("/login");
 	    },
+
 	    clearInputs() {
 	      this.username = '';
 	      this.password = '';
@@ -82,7 +80,7 @@
 </script>
  
 <style scoped>
-.login-container {
+.register-container {
   max-width: 300px;
   margin: 0 auto;
 }
@@ -123,7 +121,7 @@ form button {
   /*cursor: pointer;*/
 }
 
-form button[type="go-register"] {
+form button[type="go-login"] {
 	width: 30%;
 	background-color: #338FCC;
 }

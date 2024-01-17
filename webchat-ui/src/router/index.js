@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import LoginPage from '@/components/LoginPage'
+import RegisterPage from '@/components/RegisterPage'
 import HomePage from '@/components/HomePage'
 
 
@@ -19,6 +20,11 @@ const router = new Router({
     	path: '/login',
     	name: 'login',
     	component: LoginPage
+    },
+    {
+    	path: '/register',
+    	name: 'register',
+    	component: RegisterPage
     }
   ]
 });
