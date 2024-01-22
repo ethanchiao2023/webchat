@@ -129,4 +129,8 @@ form button[type="go-login"] {
 form button:hover {
   background-color: #45a049; /* Dark green */
 }
+ 
+form button[type="go-login"]:hover {
+  background-color: #4D8AB3;
+}
 </style>

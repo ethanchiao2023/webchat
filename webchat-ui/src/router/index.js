@@ -47,7 +47,7 @@ router.beforeEach((to, from, next) => {
 
 
 const checkIfUserIsLogged = () => {
-	return true;
+	return false;
 }
 
 export default router; 
