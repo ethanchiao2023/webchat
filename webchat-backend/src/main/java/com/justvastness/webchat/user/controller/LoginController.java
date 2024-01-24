@@ -2,8 +2,8 @@ package com.justvastness.webchat.user.controller;
 
 
 import com.justvastness.webchat.config.aspect.SysLog;
-import com.justvastness.webchat.config.enums.GlobalResultEnum;
 import com.justvastness.webchat.config.exception.CustomException;
+import com.justvastness.webchat.config.result.ApiResponse;
 import com.justvastness.webchat.user.dto.LoginDTO;
 import com.justvastness.webchat.user.dto.RegisterDTO;
 import com.justvastness.webchat.user.entity.UserEntity;
@@ -25,18 +25,18 @@ public class LoginController {
     @PostMapping(value = "/login")
     @SysLog(value = "登录")
     @ApiOperation(value = "登录", httpMethod = "POST")
-    public String login(@RequestParam String username, @RequestParam String password) {
+    public ApiResponse<UserEntity> login(@RequestParam String username, @RequestParam String password) {
         try {
             LoginDTO dto = new LoginDTO();
             dto.setUsername(username);
             dto.setPassword(password);
             UserEntity user = userService.login(dto);
             if (user == null) {
-                throw new CustomException("Login failed!");
+                return ApiResponse.fail(500, "Username or password is incorrect");
             }
-            return "Login successful!";
+            return ApiResponse.success(user);
         } catch (CustomException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getErrorMsg());
+            return ApiResponse.fail(500, e.getErrorMsg());//new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getErrorMsg());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e);
         }
@@ -45,16 +45,16 @@ public class LoginController {
     @PostMapping(value = "/register")
     @SysLog(value = "注册")
     @ApiOperation(value = "注册", httpMethod = "POST")
-    public String register(@RequestParam String username, @RequestParam String password) {
+    public ApiResponse<String> register(@RequestParam String username, @RequestParam String password) {
         try {
             RegisterDTO dto = new RegisterDTO();
             dto.setUsername(username);
             dto.setPassword(password);
             boolean result = userService.register(dto);
             if (!result) {
-                throw new CustomException("Registration failed!");
+                return ApiResponse.fail(500, "Registration failed");
             }
-            return "Registration successful!";
+            return ApiResponse.success();//"Registration successful!";
         } catch (CustomException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getErrorMsg());
         } catch (Exception e) {

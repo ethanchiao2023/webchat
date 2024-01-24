@@ -25,8 +25,7 @@
 
  
 <script>
-
-	// import request from '../utils/request';a
+	import request from '@/utils/request';
 
 	export default {
 	  data() {
@@ -40,6 +39,8 @@
 	  methods: {
 
 	    async registerRequest() {
+	    	showLoading();
+	    	
 	    	try {
 	    		const res = await this.postRequest('/register', {
 	    			username: this.username,
