@@ -1,82 +1,88 @@
-/**
- * 
- * @authors Bob Joy
- * @date    2024-01-16 16:42:45
- * @version $Id$
- */
+import axios from 'axios';
+import qs from 'qs';
+import { Message, Loading } from 'element-ui'
+import Vue from 'vue'
+// let $loadingInstance = null
 
-// 引入 axios
-import axios from "axios";
-//引入 element-ui 信息
-import {Message} from "element-ui";
-import router from "@/router";
+let loading //定义loading变量
+//使用Element loading-start 方法
+function startLoading() {
+    loading = Vue.prototype.$loading({
+        text: 'Loading',
+        // fullscreen: false,
+        // target: document.querySelector('.view-box')
+    })
+}
 
-// 创建axios实例对象
-const request = axios.create({
-    baseURL: 'http://127.0.0.1:8000', // 服务器后端地址
-    timeout: 1000,
-})
-
-//请求拦截器
-request.interceptors.request.use(config => {
-    let token = window.localStorage.getItem('token') || window.sessionStorage.getItem('token')
-    if (token) {
-        config.headers['Authorization'] = 'Bearer ' + token;
+//使用Element loading-close 方法
+function endLoading() {
+    loading.close()
+}
+//那么 showLoading() hideLoading() 要干的事儿就是将同一时刻的请求合并。
+//声明一个变量 count，每次调用showLoading方法 count + 1。
+//调用hideLoading()方法，count - 1。count为 0 时，结束 loading。
+let count = 0
+// 开始loading
+function showLoading() {
+    if (count === 0) {
+        startLoading()
     }
-    return config;
-}, error => {
-    console.log(error);
-    return Promise.reject(error)
+    count++
+}
+// 结束loading
+function hideLoading() {
+    if (count < 0) return
+    count--
+    if (count === 0) {
+        endLoading()
+    }
+}
+
+axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded' // application/x-www-form-urlencoded
+
+// 创建axios实例
+const http = axios.create({
+    // baseURL: '/api', //api的base_url
+    baseURL: 'http://localhost:8081/api', //api的base_url dev
+    timeout: 6000000, //请求超时时间
+    withCredentials: false, //跨域携带cookie
 })
-
-
-// 报错响应
-request.interceptors.response.use(
-    response => {
-        // 对响应数据做处理
-        return response;
+http.interceptors.request.use(
+    config => {
+        config.data = qs.stringify(config.data)
+        return config;
     },
-    error => {
-        if (error.response && error.response.status === 401) {
-            Message({
-                type: 'warning',
-                message: '尚未登录，请登录！',
-                offset: 54
-            })
-            router.push('/login');
-        } else {
-            return Promise.reject(error);
-        }
+    err => {
+        hideLoading()
+        return Promise.reject(err);
     }
-);
+)
 
-//传送json格式的get请求
-export const getRequest = (url) => {
-    return request.get(
-        `${url}`,
-    )
-}
+// 添加响应拦截器，这里的response是接受服务器返回后的结果，也可以在这里做状态判断
+http.interceptors.response.use(
+    response => {
+        /**
+         * 判断服务器请求是否成功
+         * @method if
+         * @param  {[type]} response [description]
+         * @return {[type]}          [description]
+         */
+        hideLoading()
+        if (response.data.code) {
+            if (response.data.code != 200 ) {
+                Message({
+                    message: `${response.data.msg}`,
+                    type: 'warning'
+                })
+            }
+        }
 
-//传送json格式的post请求
-export const postRequest = (url, params) => {
-    return request.post(
-        `${url}`,
-        params,
-    )
-}
+        return response
+    },
+    err => {
+        hideLoading()
+        return Promise.reject(err)
+    }
+)
 
-//传送json格式的put请求
-export const putRequest = (url, params) => {
-    return request.put(
-        `${url}`,
-        params,
-    )
-}
-
-//传送json格式的delete请求
-export const deleteRequest = (url, params) => {
-    return request.delete(
-        `${url}`,
-        params,
-    )
-}
+export default http

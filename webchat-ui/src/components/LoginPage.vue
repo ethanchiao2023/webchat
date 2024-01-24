@@ -25,37 +25,37 @@
 
  
 <script>
-	// import request from '../utils/request';
+	import qs from 'qs'
+	import http from '@/utils/request'
+
 	export default {
 	  data() {
 	    return {
 	      username: 'bob101', // 存储用户名
-	      password: 'Bob123', // 存储密码
+	      password: '111111', // 存储密码
 	      errorMessage: '' // 存储错误消息
 	    };
 	  },
 	  
 	  methods: {
-	    // handleSubmit() {
-
-	    // },
 
 	    async loginRequest() {
 	    	try {
-	    		const res = await request.post('', {
+	    		const res = await http.post('/login', {
 	    			username: this.username,
-				        password: this.password
+	    			password: this.password
 	    		})
 	    		.then(response => {
-	    			if (this.username === 'bob101' && this.password === 'Bob123') {
-					        // 验证成功后进行相关操作（如重定向到主页）
-					        
-					        // 清空输入字段
-					        this.clearInputs();
-				        } else {
-					        // 验证失败时设置错误提示信息
-					        this.errorMessage = "Invalid username or password";
-					    }
+	    			console.log(response.data);
+	    			// if (response.data) {
+					   //      // 验证成功后进行相关操作（如重定向到主页）
+					   //      console.log(response.data);
+					   //      // 清空输入字段
+					   //      this.clearInputs();
+				    //     } else {
+					   //      // 验证失败时设置错误提示信息
+					   //      this.errorMessage = "Invalid username or password";
+					   //  }
 	    		})
 	    		.catch(error => {
 
@@ -67,6 +67,7 @@
 	    goLogin() {
 	    	// loginRequest()
 	    	console.log("点击了登录按钮");
+	    	this.loginRequest();
 	    },
 	    goRegister() {
 	    	console.log("点击了注册按钮");

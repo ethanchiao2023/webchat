@@ -17,9 +17,9 @@ public class DBUtil {
             synchronized (DBUtil.class) {
                 if (DS == null) {
                     DS = new MysqlDataSource();
-                    DS.setURL("jdbc:mysql://127.0.0.1:3306/chatroom");
+                    DS.setURL("jdbc:mysql://127.0.0.1:3306/webchat");
                     DS.setUser("root");
-                    DS.setPassword("xiaobai520..@@@");
+                    DS.setPassword("qb123456");
                     DS.setUseSSL(false);
 //                    DS.setUseUnicode(true);
                     DS.setCharacterEncoding("UTF-8");
@@ -31,6 +31,7 @@ public class DBUtil {
 
     // 获取数据库连接
     public static Connection getConnection() throws SQLException {
+        System.out.println("### 获取数据库连接");
         return getDS().getConnection();
     }
 

@@ -1,0 +1,28 @@
+
+server:
+  port: 8081
+
+spring:
+  mvc:
+    view:
+      prefix: classpath:/templates
+      suffix: .html
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/webchat
+    username: root
+    password: qb123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+
+bgs:
+  swagger:
+    contact:
+      name: BobJoe
+      url: https://www.liuyunm.com
+      email: bobsfuture@outlook.com

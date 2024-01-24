@@ -3,7 +3,8 @@ package com.justvastness.webchat;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+
+@SpringBootApplication(scanBasePackages = "com.justvastness.webchat.*")
 public class WebchatApplication {
 
     public static void main(String[] args) {

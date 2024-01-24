@@ -1,4 +1,4 @@
-package com.justvastness.webchat.Models;
+package com.justvastness.webchat.user.entity;
 
 import lombok.Getter;
 import lombok.Setter;

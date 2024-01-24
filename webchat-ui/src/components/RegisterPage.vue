@@ -25,12 +25,14 @@
 
  
 <script>
-	// import request from '../utils/request';
+
+	// import request from '../utils/request';a
+
 	export default {
 	  data() {
 	    return {
 	      username: 'bob101', // 存储用户名
-	      password: 'Bob123', // 存储密码
+	      password: '111111', // 存储密码
 	      errorMessage: '' // 存储错误消息
 	    };
 	  },
@@ -39,9 +41,9 @@
 
 	    async registerRequest() {
 	    	try {
-	    		const res = await request.post('', {
+	    		const res = await this.postRequest('/register', {
 	    			username: this.username,
-				        password: this.password
+				    password: this.password
 	    		})
 	    		.then(response => {
 	    			if (this.username === 'bob101' && this.password === 'Bob123') {
@@ -58,12 +60,13 @@
 
 	    		});
 	    	} catch(e) {
-	    		console.error("LoginRequest Error: ", e);
+	    		console.error("RegisterRequest Error: ", e);
 	    	}
 	    },
 
 	    onRegister() {
-			registerRequest();
+	    	console.log("Call method -- registerRequest");
+			this.registerRequest();
 	    },
 
 	    onLogin() {
