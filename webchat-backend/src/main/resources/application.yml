@@ -3,14 +3,38 @@ server:
   port: 8081
 
 spring:
-  mvc:
-    view:
-      prefix: classpath:/templates
-      suffix: .html
+  profiles:
+    active: dev
+  application:
+    name: webchat
+  messages:
+    basename: i18n/base, i18n/global, i18n/login
+  main:
+    allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    timeout: 10000
+    lettuce:
+      pool:
+        min-idle: 0
+        max-wait: -1
+        max-active: 8
+        max-idle: 8
+
   jackson:
     default-property-inclusion: non_null
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+
+
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/webchat
     username: root
@@ -18,7 +42,21 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis-plus:
+  typeEnumsPackage: com.justvastness.webchat.config.mybatisplus.enums
   mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: com.justvastness.webchat.modules.*.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    auto-mapping-behavior: full
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-field: del_flag  # ????????????(since 3.3.0,???????)
+      logic-delete-value: 1 # ??????(??? 1)
+      logic-not-delete-value: 0 # ??????(??? 0)
+      id-type: ASSIGN_ID
 
 bgs:
   swagger:

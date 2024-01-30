@@ -1,9 +1,11 @@
 package com.justvastness.webchat.config.i18n;
 
 import cn.hutool.extra.spring.SpringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
@@ -16,12 +18,10 @@ import java.util.Locale;
  **/
 
 public class I18nUtil {
-
     public static String message(String key) {
         final Locale locale = LocaleContextHolder.getLocale();
         final MessageSource messageSource = SpringUtil.getBean(AbstractApplicationContext.MESSAGE_SOURCE_BEAN_NAME,
                 MessageSource.class);
         return messageSource.getMessage(key, null, locale);
     }
-
 }
